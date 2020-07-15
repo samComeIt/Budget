@@ -1,8 +1,32 @@
 // use modules -> bc -> keep pieces of code that are related
 
 var bugetController = (function() {
+    var Expense = function(id, description, value){
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
     
+    var Income = function(id, description, value){
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+    
+    //Store in array
+    var data = {
+        allItem: {
+            exp:[],
+            inc:[]
+        },
+        totals: {
+            exp: 0,
+            inc: 0
+        }
+    }
 })();
+
+
 
 var UIController = (function() {
     
@@ -48,7 +72,7 @@ var controller = (function(bugetCtrl, UICtrl) {
     var ctrlAddItem = function(){
        // 1. Get the filed input data
         var input = UICtrl.getinput();
-       
+        //console.log(input);
         //2. Add the item to the budget controller
         
         //3. Add the item to the UI
