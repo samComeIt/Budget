@@ -13,8 +13,16 @@ var bugetController = (function() {
         this.value = value;
     };
     
+    var calculateTotal = function(type) {
+        var sum = 0;
+        data.allItems[type].forEach(function(cur) {
+            sum = sum + cur.value;
+        });
+        data.totals[type] = sum;
+    };
+    
     //Store in array
-    var data = {
+    var data = { // global data model
         allItems: {
             exp:[],
             inc:[]
@@ -22,7 +30,9 @@ var bugetController = (function() {
         totals: {
             exp: 0,
             inc: 0
-        }
+        },
+        budget: 0,
+        percentage: -1 //nonexistence
     };
     
     return {
@@ -50,6 +60,31 @@ var bugetController = (function() {
             //Return the new element
             return newItem;
         },
+        
+        calculateBudget: function(){
+          // calculate total inc and exp
+            calculateTotal('exp');
+            calculateTotal('inc');
+            // calculate the budget: inc - exp
+            data.budget = data.totals.inc - data.totals.exp;
+            // calculate the percentage of inc that we spent
+            if(data.totals.inc > 0){
+               data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100); 
+            }else {
+                data.percentage = -1;
+            }
+            
+        },
+        
+        getBudget: function() {
+          return {
+              budget: data.budget,
+              totalInc: data.totals.inc,
+              totalExp: data.totals.exp,
+              percentage: data.percentage
+          };  
+        },
+        
         testing: function(){
             console.log(data);
         }
@@ -137,11 +172,11 @@ var controller = (function(bugetCtrl, UICtrl) {
     
     var updateBudget = function() {
         //5. Calculate the budget
-        
+        bugetCtrl.calculateBudget();
         //6. Return th budget
-        
+        var budget = bugetCtrl.getBudget();
         //7. Display the budget on the UI
-        
+        console.log(budget);
         
         
     };
